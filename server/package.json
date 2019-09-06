@@ -23,7 +23,7 @@
     "node-uuid": "^1.4.7",
     "sequelize": "^3.23.4",
     "serve-favicon": "~2.3.0",
-    "sqlite3": "^3.1.4",
+    "sqlite3": "^4.1.0",
     "yargs": "^6.6.0"
   },
   "devDependencies": {

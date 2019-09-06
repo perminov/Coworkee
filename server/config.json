@@ -14,7 +14,7 @@
         "classRouteUrl": "/api",
         "classPath": "/api",
         "server": "localhost",
-        "port": "3000",
+        "port": "3001",
         "protocol": "http",
         "timeout": 30000,
         "cacheAPI": false,
