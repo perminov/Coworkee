@@ -14,10 +14,10 @@ Ext.define('App.view.auth.Login', {
 
     items: [{
         cls: 'auth-header',
+        reference: 'header',
         html:
-            '<span class="logo x-fa fa-circle-o-notch"></span>'+
-            '<div class="title">Coworkee</div>'+
-            '<div class="caption">Employee directory</div>'
+            '<img src width="150">'+
+            '<div class="caption">Управление таксопарком</div>'
     }, {
         xtype: 'formpanel',
         reference: 'form',
@@ -27,28 +27,25 @@ Ext.define('App.view.auth.Login', {
         items: [{
             xtype: 'textfield',
             name: 'username',
-            placeholder: 'Username',
+            placeholder: 'Пользователь',
             required: true
         }, {
             xtype: 'passwordfield',
             name: 'password',
-            placeholder: 'Password',
+            placeholder: 'Пароль',
             required: true
         }, {
+            xtype: 'combobox',
+            placeholder: 'Язык',
+            displayField: 'title',
+            valueField: 'alias'
+        }, {
             xtype: 'button',
-            text: 'LOG IN',
+            text: 'Вход',
             iconAlign: 'right',
             iconCls: 'x-fa fa-angle-right',
             handler: 'onLoginTap',
             ui: 'action'
         }]
-    }, {
-        cls: 'auth-footer',
-        html:
-            '<div>Ext JS example</div>'+
-            '<a href="http://www.sencha.com" target="_blank">'+
-                '<span class="logo ext ext-sencha"></span>'+
-                '<span class="label">Sencha</span>'+
-            '</a>'
     }]
 });

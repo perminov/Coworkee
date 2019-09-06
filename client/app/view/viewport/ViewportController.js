@@ -5,6 +5,7 @@ Ext.define('App.view.viewport.ViewportController', {
     mixins: [ 'Ext.mixin.Mashup' ],
 
     requiredScripts: [ '/api' ],
+    //requiredScripts: [ 'https://devel.cariot.ru/data/auth' ],
 
     listen: {
         controller: {
