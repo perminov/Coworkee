@@ -7,7 +7,7 @@ Ext.define('App.view.auth.LoginController', {
 
         // Call parent
         this.callParent(arguments);
-        // https://devel.cariot.ru/data/auth
+
         // Get initial options
         Ext.Ajax.request({url: this.host + '/crm/v1/options_pre'}).then(function(response, opts) {
             var opt = Ext.decode(response.responseText).options_pre;
@@ -22,12 +22,6 @@ Ext.define('App.view.auth.LoginController', {
                 }(opt.LOCALE_AVAILABLE)
             });
             me.lookup('form').down('combobox').setValue(opt.LOCALE_DEFAULT);
-            //console.log(me.lookup('form').down('combobox'));
-            //console.log(me.lookup('form').down('combobox').getStore().add([{title: 'asd', alias: 'hello'}]));
-            //console.log(me.lookup('form').down('combobox').getStore().loadRawData([{title: 'asd', alias: 'hello'}], true));
-            //console.log(me.lookup('form').down('combobox').getStore().loadData([{title: 'asd', alias: 'hello'}], true));
-            //console.log(me.lookup('form').down('combobox').getStore().collect('alias'));
-            //console.log(me.lookup('form').down('combobox').getStore().commitChanges());
         }, function(response, opts) {
             console.log('server-side failure with status code ' + response.status);
         });
@@ -42,15 +36,16 @@ Ext.define('App.view.auth.LoginController', {
 
         Ext.Viewport.setMasked({ xtype: 'loadmask' });
 
-        App.model.Session.login(values.username, values.password)
-            .then(function(session) {
-                me.fireEvent('login', session);
-            })
-            .catch(function(errors) {
-                form.setErrors(App.util.Errors.toForm(errors));
-            })
-            .then(function(session) {
+        Ext.Ajax.request({
+            url: 'https://devel.cariot.ru/data' + '/auth',
+            method: 'POST',
+            params: values,
+            scope: this,
+            callback: function(options, success, response){
+                if (response.responseText === "lf") form.setErrors({username: 'Неверное имя пользователя и/или пароль'});
+                else me.fireEvent('login', response.responseText);
                 Ext.Viewport.setMasked(false);
-            });
+            }
+        });
     }
 });

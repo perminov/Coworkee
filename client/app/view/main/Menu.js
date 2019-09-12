@@ -38,7 +38,7 @@ Ext.define('App.view.main.Menu', {
                 childtap: 'onMenuChildTap'
             }
         },
-        profile: {
+        /*profile: {
             xtype: 'button',
             handler: 'onProfileTap',
             ui: 'large flat dark picture',
@@ -50,7 +50,7 @@ Ext.define('App.view.main.Menu', {
                 text: '<div class="title">{user.firstname}</div>'+
                     '<div class="value">{user.username}</div>'
             }
-        },
+        },*/
         logout: {
             xtype: 'button',
             handler: 'onLogoutTap',

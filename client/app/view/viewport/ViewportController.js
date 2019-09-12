@@ -18,12 +18,12 @@ Ext.define('App.view.viewport.ViewportController', {
     },
 
     routes: {
-        'login': 'handleLoginRoute'
+        //'login': 'handleLoginRoute'
     },
 
     onLaunch: function() {
         this.originalRoute = App.getApplication().getDefaultToken();
-        this.initDirect();
+        //this.initDirect();
         this.restoreSession();
     },
 
@@ -65,7 +65,7 @@ Ext.define('App.view.viewport.ViewportController', {
     handleUnmatchedRoute: function(route) {
         var me = this;
 
-        if (!me.session || !me.session.isValid()) {
+        /*if (!me.session || !me.session.isValid()) {
             // There is no authenticated user, let's redirect to the login page but keep track
             // of the original route to restore the requested route after user authentication.
             me.originalRoute = route;
@@ -78,98 +78,29 @@ Ext.define('App.view.viewport.ViewportController', {
         Ext.log.warn('Route unknown: ', route);
         if (route !== target) {
             me.redirectTo(target, {replace: true});
-        }
+        }*/
     },
-
-    // EXT DIRECT
-
-    initDirect: function() {
-        var api = Server.API;
-        if (!api) {
-            Ext.raise('Failed to load Direct API');
-        }
-
-        Ext.direct.Manager.addProvider(Ext.applyIf({
-            id: 'server',
-            listeners: {
-                data: 'onDirectData',
-                scope: this
-            }
-        }, api));
-    },
-
-    setDirectToken: function(token) {
-        // https://jwt.io/introduction/#how-do-json-web-tokens-work-
-        var provider = Ext.direct.Manager.getProvider('server'),
-            headers = provider.getHeaders() || {};
-
-        if (token) {
-            headers['Authorization'] = 'Bearer ' + token;
-        } else {
-            delete headers['Authorization'];
-        }
-
-        provider.setHeaders(headers);
-    },
-
-    onDirectData: function(provider, e) {
-        if (e.type !== 'exception') {
-            return;
-        }
-
-        var message = e.message || {};
-        switch (message.code) {
-        case -32098:    // AuthTokenExpired
-        case -32097:    // AuthTokenInvalid
-            // Defer user deauthentication until the current direct transaction is done.
-            Ext.asap(this.terminateSession, this);
-            break;
-        default:
-            break;
-        }
-    },
-
-    // SESSION MANAGEMENT
 
     restoreSession: function() {
-        var data = App.util.State.get('session'),
-            session = data? App.model.Session.loadData(data) : null;
-
-        if (session && session.isValid()) {
-            this.initiateSession(session);
-        } else {
-            this.terminateSession();
-        }
-
-        return session;
+        var li = localStorage.getItem('LoggedIn'), cs = localStorage.getItem('csess');
+        if (li == 'true' && cs != 'null') this.initiateSession(cs);
+        else this.terminateSession();
     },
 
-    initiateSession: function(session) {
-        this.setDirectToken(session.get('token'));
-        this.saveSession(session);
+    initiateSession: function(token) {
+        localStorage.setItem("LoggedIn", true);
+        localStorage.setItem("csess", token);
         this.showMain();
     },
 
     terminateSession: function() {
-        this.setDirectToken(null);
-        this.saveSession(null);
+        localStorage.setItem("LoggedIn", null);
+        localStorage.setItem("csess", null);
         this.showAuth();
     },
 
-    saveSession: function(session) {
-        App.util.State.set('session', session && session.getData(true));
-        this.getViewModel().set('user', session && session.getUser());
-        this.session = session;
-    },
-
-    // AUTHENTICATION
-
-    onLogin: function(session) {
-        if (!session || !session.isValid()) {
-            return false;
-        }
-
-        this.initiateSession(session);
+    onLogin: function(token) {
+        this.initiateSession(token);
         this.redirectTo(this.originalRoute, {replace: true});
     },
 
@@ -178,19 +109,31 @@ Ext.define('App.view.viewport.ViewportController', {
             view = me.getView(),
             session = me.session;
 
-        if (!session || !session.isValid()) {
+        /*if (!session || !session.isValid()) {
             return false;
-        }
+        }*/
 
         view.setMasked({ xtype: 'loadmask' });
-        session.logout().catch(function() {
+        Ext.Ajax.request({
+            url: 'https://devel.cariot.ru/data' + '/auth',
+            method: 'DELETE',
+            scope: this,
+            callback: function(){
+                me.originalRoute = Ext.History.getToken();
+                me.terminateSession();
+                view.setMasked(false);
+                me.redirectTo('login', {replace: true});
+            }
+        });
+
+        /*session.logout().catch(function() {
             // TODO handle errors
         }).then(function() {
             me.originalRoute = Ext.History.getToken();
             me.terminateSession();
             view.setMasked(false);
             me.redirectTo('login', {replace: true});
-        });
+        });*/
     }
 });
 

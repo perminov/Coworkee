@@ -42,14 +42,14 @@ Ext.define('App.view.home.Home', {
         items: [{
             xtype: 'container',
             userCls: 'blocks-column',
-            items: [{
+            items: [/*{
                 xtype: 'homeevents',
                 ui: 'block flat'
-            }]
+            }*/]
         }, {
             xtype: 'container',
             userCls: 'blocks-column',
-            items: [{
+            items: [/*{
                 xtype: 'historypanel',
                 bind: '{history}',
                 ui: 'block flat',
@@ -63,7 +63,7 @@ Ext.define('App.view.home.Home', {
                 listeners: {
                     childtap: 'onHistoryChildTap'
                 }
-            }]
+            }*/]
         }]
     }],
 

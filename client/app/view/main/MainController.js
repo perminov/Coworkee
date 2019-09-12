@@ -3,7 +3,7 @@ Ext.define('App.view.main.MainController', {
     alias: 'controller.main',
 
     routes: {
-        ':type(/:args)?': {
+        /*':type(/:args)?': {
             action: 'handleNavigationRoute',
             conditions: {
                 // NOTE(SB): how to build this list automatically from the Menu store?
@@ -18,7 +18,7 @@ Ext.define('App.view.main.MainController', {
                 ':id': '([a-f0-9-]{36}|create|edit)',
                 ':args': '(.*)'
             }
-        }
+        }*/
     },
 
     listen: {
@@ -71,7 +71,7 @@ Ext.define('App.view.main.MainController', {
     },
 
     handleNavigationRoute: function(type, args) {
-        var store = Ext.getStore('Menu'),
+        /*var store = Ext.getStore('Menu'),
             entry = store.getById(type);
 
         this.lookup('mainmenu').setSelection(entry);
@@ -83,11 +83,11 @@ Ext.define('App.view.main.MainController', {
             this.ensureView(type, {
                 xtype: entry.get('xtype'),
                 title: entry.get('text')
-            }, args));
+            }, args));*/
     },
 
     handleDataRoute: function(type, id, args) {
-        var me = this,
+        /*var me = this,
             args = Ext.Array.clean((args || '').split('/')),
             Model = App.model[Ext.String.capitalize(type)],
             action, xtype, view;
@@ -135,7 +135,7 @@ Ext.define('App.view.main.MainController', {
                     }
                 }
             }
-        });
+        });*/
     },
 
     onToggleMainMenu: function(expanded) {

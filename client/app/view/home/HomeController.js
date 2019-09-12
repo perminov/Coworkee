@@ -11,11 +11,11 @@ Ext.define('App.view.home.HomeController', {
 
     init: function() {
         this.callParent(arguments);
-        this.update();
+        //this.update();
     },
 
     initViewModel: function(vm) {
-        vm.bind('{range}', this.onRangeChange, this);
+        //vm.bind('{range}', this.onRangeChange, this);
     },
 
     update: function() {
@@ -43,8 +43,8 @@ Ext.define('App.view.home.HomeController', {
 
     refresh: function() {
         var vm = this.getViewModel();
-        vm.getStore('history').load();
-        vm.getStore('events').load();
+        //vm.getStore('history').load();
+        //vm.getStore('events').load();
     },
 
     onRangeChange: function(range) {
